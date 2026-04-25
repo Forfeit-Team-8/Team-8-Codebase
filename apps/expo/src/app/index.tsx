@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
@@ -21,28 +20,9 @@ function statusDot(status: string, dayNumber: number, total: number) {
   return C.primary;
 }
 
-function useEnsureSignedIn() {
-  const { data: session, isPending } = authClient.useSession();
-  const signingInRef = useRef(false);
-  useEffect(() => {
-    if (isPending || session || signingInRef.current) return;
-    signingInRef.current = true;
-    void authClient.signIn
-      .anonymous()
-      .then(async () => {
-        const guestName = `Guest ${Math.floor(Math.random() * 9000) + 1000}`;
-        await authClient.updateUser({ name: guestName });
-      })
-      .finally(() => {
-        signingInRef.current = false;
-      });
-  }, [isPending, session]);
-  return session;
-}
-
 export default function Home() {
   const router = useRouter();
-  const session = useEnsureSignedIn();
+  const { data: session } = authClient.useSession();
 
   const pactsQuery = useQuery({
     ...trpc.pact.list.queryOptions(),

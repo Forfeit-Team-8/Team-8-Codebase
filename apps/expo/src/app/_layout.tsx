@@ -7,6 +7,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { HeroUINativeProvider } from "heroui-native";
 
 import { queryClient } from "~/utils/api";
+import { useEnsureSignedIn } from "~/utils/use-ensure-signed-in";
 
 import "../styles.css";
 
@@ -19,10 +20,7 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <HeroUINativeProvider>
           <QueryClientProvider client={queryClient}>
-            {/*
-                The Stack component displays the current page.
-                It also allows you to configure your screens
-              */}
+            <SignInGate />
             <Stack
               screenOptions={{
                 headerStyle: {
@@ -40,4 +38,12 @@ export default function RootLayout() {
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
+}
+
+// Renders nothing — only here to mount the `useEnsureSignedIn` effect inside
+// the QueryClientProvider so the anonymous sign-in fires regardless of
+// which screen the user lands on first.
+function SignInGate() {
+  useEnsureSignedIn();
+  return null;
 }
