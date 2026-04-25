@@ -293,12 +293,12 @@ function Step1({ title, setTitle, duration, setDuration }: Step1Props) {
   );
 }
 
-type NgoListItem = {
+interface NgoListItem {
   id: string;
   name: string;
   emoji: string;
   tag: string;
-};
+}
 interface Step2Props {
   ngos: NgoListItem[];
   ngoId: string;

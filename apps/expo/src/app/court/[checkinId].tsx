@@ -73,11 +73,11 @@ export default function Courtroom() {
   };
 
   const cur: Turn | undefined = script?.[step];
-  const dialog = cur && cur.type === "speak" ? cur.text : "";
+  const dialog = cur?.type === "speak" ? cur.text : "";
   const [typed, done] = useTypewriter(dialog);
 
   useEffect(() => {
-    if (cur && cur.type === "speak" && cur.shout) {
+    if (cur?.type === "speak" && cur.shout) {
       setShout(cur.shout);
       Animated.sequence([
         Animated.timing(shakeAnim, {
@@ -215,7 +215,7 @@ export default function Courtroom() {
     const won = credibility >= 3;
     finalize.mutate(
       {
-        checkinId: checkinId!,
+        checkinId,
         won,
         credibility,
         choiceId,

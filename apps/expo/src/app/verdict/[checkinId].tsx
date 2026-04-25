@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Animated, Text, View } from "react-native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
@@ -9,7 +9,7 @@ import { C } from "~/promise/theme";
 import { trpc } from "~/utils/api";
 
 export default function Verdict() {
-  const { checkinId, won: wonParam } = useLocalSearchParams<{
+  const { won: wonParam } = useLocalSearchParams<{
     checkinId: string;
     won?: string;
   }>();
@@ -17,8 +17,11 @@ export default function Verdict() {
   const won = wonParam === "1";
 
   const [reveal, setReveal] = useState(false);
-  const reveal0 = useRef(new Animated.Value(0)).current;
-  const reveal1 = useRef(new Animated.Value(0)).current;
+  // Lazy state init — creates the Animated.Value once and gives a stable
+  // reference without reading .current during render (which the
+  // react-hooks/purity rule forbids).
+  const [reveal0] = useState(() => new Animated.Value(0));
+  const [reveal1] = useState(() => new Animated.Value(0));
 
   // The pact / NGO / stake context — we look up via list because we don't
   // have the pact id directly. For the slice this is fine; the verdict only

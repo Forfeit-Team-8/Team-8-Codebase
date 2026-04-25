@@ -181,6 +181,12 @@ export const courtRouter = {
         })
         .where(eq(Checkin.id, input.checkinId))
         .returning();
+      if (!updated) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to update checkin",
+        });
+      }
 
       // Forfeit closes the pact in the design's flow.
       if (!input.won) {
@@ -191,7 +197,7 @@ export const courtRouter = {
       }
 
       return {
-        checkin: updated!,
+        checkin: updated,
         won: input.won,
         stakeCents: pact.stakeCents,
       };

@@ -148,8 +148,14 @@ export const pactRouter = {
         .insert(Checkin)
         .values({ pactId: pact.id, dayNumber })
         .returning();
+      if (!created) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create checkin",
+        });
+      }
 
-      return created!;
+      return created;
     }),
 
   stats: protectedProcedure.query(async ({ ctx }) => {

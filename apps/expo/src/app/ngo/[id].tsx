@@ -11,7 +11,7 @@ export default function NgoDetail() {
   const router = useRouter();
 
   const ngoQuery = useQuery({
-    ...trpc.ngo.byId.queryOptions({ id: id ?? "" }),
+    ...trpc.ngo.byId.queryOptions({ id }),
     enabled: !!id,
   });
   const d = ngoQuery.data;

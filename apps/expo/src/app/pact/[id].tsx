@@ -18,7 +18,7 @@ export default function PactDetail() {
   const router = useRouter();
 
   const detailQuery = useQuery({
-    ...trpc.pact.byId.queryOptions({ pactId: id ?? "" }),
+    ...trpc.pact.byId.queryOptions({ pactId: id }),
     enabled: !!id,
   });
 
@@ -161,7 +161,7 @@ export default function PactDetail() {
                   <Text style={{ fontSize: 12 }}>
                     <Text style={{ color: C.muted }}>Forfeit to </Text>
                     <Text style={{ color: C.ink, fontWeight: "700" }}>
-                      {data.ngo?.name?.split(" ")[0] ?? "—"}
+                      {data.ngo?.name.split(" ")[0] ?? "—"}
                     </Text>
                   </Text>
                 </View>

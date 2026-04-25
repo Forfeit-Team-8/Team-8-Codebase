@@ -1,5 +1,5 @@
 import type { ViewStyle } from "react-native";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Animated, View } from "react-native";
 import Svg, { Rect } from "react-native-svg";
 
@@ -22,7 +22,9 @@ export function PixelArt({ grid, palette, scale = 4, style }: PixelArtProps) {
 
   const rects: { x: number; y: number; fill: string }[] = [];
   for (let y = 0; y < h; y++) {
-    const row = lines[y]!.padEnd(w, ".");
+    const line = lines[y];
+    if (line === undefined) continue;
+    const row = line.padEnd(w, ".");
     for (let x = 0; x < w; x++) {
       const ch = row[x];
       if (ch === "." || ch === " " || ch === undefined) continue;
@@ -260,8 +262,9 @@ export function IdleBob({
   delay = 0,
   style,
 }: IdleBobProps) {
-  const anim = useRef(new Animated.Value(0)).current;
-  const [_, force] = useState(0);
+  // Lazy state init avoids the react-hooks/purity warning that fires on
+  // `useRef(new ...).current` (it reads .current during render).
+  const [anim] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     let cancelled = false;
@@ -276,7 +279,6 @@ export function IdleBob({
     tick();
     return () => {
       cancelled = true;
-      void force;
     };
   }, [amp, speed, delay, anim]);
 
