@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, Stack } from "expo-router";
@@ -99,26 +99,36 @@ function CreatePost() {
 }
 
 function MobileAuth() {
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
+  const signingInRef = useRef(false);
+
+  useEffect(() => {
+    if (isPending || session || signingInRef.current) return;
+    signingInRef.current = true;
+    void authClient.signIn
+      .anonymous()
+      .then(async () => {
+        const guestName = `Guest ${Math.floor(Math.random() * 9000) + 1000}`;
+        await authClient.updateUser({ name: guestName });
+      })
+      .finally(() => {
+        signingInRef.current = false;
+      });
+  }, [isPending, session]);
 
   return (
     <>
       <Text className="text-foreground pb-2 text-center text-xl font-semibold">
-        {session?.user.name ? `Hello, ${session.user.name}` : "Not logged in"}
+        {session?.user.name ? `Hello, ${session.user.name}` : "Signing in…"}
       </Text>
-      <Pressable
-        onPress={() =>
-          session
-            ? authClient.signOut()
-            : authClient.signIn.social({
-                provider: "discord",
-                callbackURL: "/",
-              })
-        }
-        className="bg-primary flex items-center rounded-sm p-2"
-      >
-        <Text>{session ? "Sign Out" : "Sign In With Discord"}</Text>
-      </Pressable>
+      {session && (
+        <Pressable
+          onPress={() => authClient.signOut()}
+          className="bg-primary flex items-center rounded-sm p-2"
+        >
+          <Text>Sign Out</Text>
+        </Pressable>
+      )}
     </>
   );
 }
