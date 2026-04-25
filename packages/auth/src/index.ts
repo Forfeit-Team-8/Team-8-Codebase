@@ -20,11 +20,7 @@ export function initAuth<
     }),
     baseURL: options.baseUrl,
     secret: options.secret,
-    plugins: [
-      anonymous(),
-      expo(),
-      ...(options.extraPlugins ?? []),
-    ],
+    plugins: [anonymous(), expo(), ...(options.extraPlugins ?? [])],
     trustedOrigins: ["expo://"],
     onAPIError: {
       onError(error, ctx) {
