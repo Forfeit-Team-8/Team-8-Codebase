@@ -1,0 +1,75 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: team8-dev:latest
+    working_dir: /workspace
+    init: true
+    ports:
+      - "3000:3000"
+    environment:
+      CHOKIDAR_USEPOLLING: "1"
+      WATCHPACK_POLLING: "true"
+    volumes:
+      - .:/workspace
+      - team8_node_modules:/workspace/node_modules
+      - team8_nm_apps_nextjs:/workspace/apps/nextjs/node_modules
+      - team8_nm_apps_expo:/workspace/apps/expo/node_modules
+      - team8_nm_packages_api:/workspace/packages/api/node_modules
+      - team8_nm_packages_auth:/workspace/packages/auth/node_modules
+      - team8_nm_packages_db:/workspace/packages/db/node_modules
+      - team8_nm_packages_ui:/workspace/packages/ui/node_modules
+      - team8_nm_packages_validators:/workspace/packages/validators/node_modules
+      - team8_nm_tooling_eslint:/workspace/tooling/eslint/node_modules
+      - team8_nm_tooling_github:/workspace/tooling/github/node_modules
+      - team8_nm_tooling_prettier:/workspace/tooling/prettier/node_modules
+      - team8_nm_tooling_tailwind:/workspace/tooling/tailwind/node_modules
+      - team8_nm_tooling_typescript:/workspace/tooling/typescript/node_modules
+      - team8_pnpm_store:/root/.local/share/pnpm/store
+    command: ["pnpm", "-F", "@acme/nextjs", "dev"]
+
+  expo-native:
+    image: team8-dev:latest
+    working_dir: /workspace
+    init: true
+    ports:
+      - "8081:8081"
+    environment:
+      CHOKIDAR_USEPOLLING: "1"
+      WATCHPACK_POLLING: "true"
+      REACT_NATIVE_PACKAGER_HOSTNAME: "192.168.1.134"
+      EXPO_NO_TELEMETRY: "1"
+    volumes:
+      - .:/workspace
+      - team8_node_modules:/workspace/node_modules
+      - team8_nm_apps_nextjs:/workspace/apps/nextjs/node_modules
+      - team8_nm_apps_expo:/workspace/apps/expo/node_modules
+      - team8_nm_packages_api:/workspace/packages/api/node_modules
+      - team8_nm_packages_auth:/workspace/packages/auth/node_modules
+      - team8_nm_packages_db:/workspace/packages/db/node_modules
+      - team8_nm_packages_ui:/workspace/packages/ui/node_modules
+      - team8_nm_packages_validators:/workspace/packages/validators/node_modules
+      - team8_nm_tooling_eslint:/workspace/tooling/eslint/node_modules
+      - team8_nm_tooling_github:/workspace/tooling/github/node_modules
+      - team8_nm_tooling_prettier:/workspace/tooling/prettier/node_modules
+      - team8_nm_tooling_tailwind:/workspace/tooling/tailwind/node_modules
+      - team8_nm_tooling_typescript:/workspace/tooling/typescript/node_modules
+      - team8_pnpm_store:/root/.local/share/pnpm/store
+    command: ["pnpm", "-F", "@acme/expo", "dev"]
+
+volumes:
+  team8_node_modules:
+  team8_pnpm_store:
+  team8_nm_apps_nextjs:
+  team8_nm_apps_expo:
+  team8_nm_packages_api:
+  team8_nm_packages_auth:
+  team8_nm_packages_db:
+  team8_nm_packages_ui:
+  team8_nm_packages_validators:
+  team8_nm_tooling_eslint:
+  team8_nm_tooling_github:
+  team8_nm_tooling_prettier:
+  team8_nm_tooling_tailwind:
+  team8_nm_tooling_typescript:
