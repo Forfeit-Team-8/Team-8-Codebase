@@ -1,107 +1,29 @@
-import { useEffect, useRef, useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Link, Stack } from "expo-router";
-import { LegendList } from "@legendapp/list";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "heroui-native";
+import { useEffect, useRef } from "react";
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { Stack, useRouter } from "expo-router";
+import { useQuery } from "@tanstack/react-query";
 
-import type { RouterOutputs } from "~/utils/api";
+import { Btn } from "~/promise/Btn";
+import { TabBar } from "~/promise/TabBar";
+import { C } from "~/promise/theme";
 import { trpc } from "~/utils/api";
 import { authClient } from "~/utils/auth";
 
-function PostCard(props: {
-  post: RouterOutputs["post"]["all"][number];
-  onDelete: () => void;
-}) {
-  return (
-    <View className="bg-muted flex flex-row rounded-lg p-4">
-      <View className="grow">
-        <Link
-          asChild
-          href={{
-            pathname: "/post/[id]",
-            params: { id: props.post.id },
-          }}
-        >
-          <Pressable className="">
-            <Text className="text-primary text-xl font-semibold">
-              {props.post.title}
-            </Text>
-            <Text className="text-foreground mt-2">{props.post.content}</Text>
-          </Pressable>
-        </Link>
-      </View>
-      <Pressable onPress={props.onDelete}>
-        <Text className="text-primary font-bold uppercase">Delete</Text>
-      </Pressable>
-    </View>
-  );
+function dollars(cents: number) {
+  return `$${Math.round(cents / 100)}`;
 }
 
-function CreatePost() {
-  const queryClient = useQueryClient();
-
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-
-  const { mutate, error } = useMutation(
-    trpc.post.create.mutationOptions({
-      async onSuccess() {
-        setTitle("");
-        setContent("");
-        await queryClient.invalidateQueries(trpc.post.all.queryFilter());
-      },
-    }),
-  );
-
-  return (
-    <View className="mt-4 flex gap-2">
-      <TextInput
-        className="border-input bg-background text-foreground items-center rounded-md border px-3 text-lg leading-tight"
-        value={title}
-        onChangeText={setTitle}
-        placeholder="Title"
-      />
-      {error?.data?.zodError?.fieldErrors.title && (
-        <Text className="text-destructive mb-2">
-          {error.data.zodError.fieldErrors.title}
-        </Text>
-      )}
-      <TextInput
-        className="border-input bg-background text-foreground items-center rounded-md border px-3 text-lg leading-tight"
-        value={content}
-        onChangeText={setContent}
-        placeholder="Content"
-      />
-      {error?.data?.zodError?.fieldErrors.content && (
-        <Text className="text-destructive mb-2">
-          {error.data.zodError.fieldErrors.content}
-        </Text>
-      )}
-      <Button
-        onPress={() => {
-          mutate({
-            title,
-            content,
-          });
-        }}
-      >
-        Create
-      </Button>
-      {error?.data?.code === "UNAUTHORIZED" && (
-        <Text className="text-destructive mt-2">
-          You need to be logged in to create a post
-        </Text>
-      )}
-    </View>
-  );
+function statusDot(status: string, dayNumber: number, total: number) {
+  if (dayNumber >= total) return C.muted;
+  if (status === "active" && dayNumber === 0) return C.muted;
+  // simple heuristic for the design's "due" / "on-track" / "pending" dots
+  if (status === "pending" || dayNumber === 0) return C.muted;
+  return C.primary;
 }
 
-function MobileAuth() {
+function useEnsureSignedIn() {
   const { data: session, isPending } = authClient.useSession();
   const signingInRef = useRef(false);
-
   useEffect(() => {
     if (isPending || session || signingInRef.current) return;
     signingInRef.current = true;
@@ -115,68 +37,163 @@ function MobileAuth() {
         signingInRef.current = false;
       });
   }, [isPending, session]);
-
-  return (
-    <>
-      <Text className="text-foreground pb-2 text-center text-xl font-semibold">
-        {session?.user.name ? `Hello, ${session.user.name}` : "Signing in…"}
-      </Text>
-      {session && (
-        <Pressable
-          onPress={() => authClient.signOut()}
-          className="bg-primary flex items-center rounded-sm p-2"
-        >
-          <Text>Sign Out</Text>
-        </Pressable>
-      )}
-    </>
-  );
+  return session;
 }
 
-export default function Index() {
-  const queryClient = useQueryClient();
+export default function Home() {
+  const router = useRouter();
+  const session = useEnsureSignedIn();
 
-  const postQuery = useQuery(trpc.post.all.queryOptions());
+  const pactsQuery = useQuery({
+    ...trpc.pact.list.queryOptions(),
+    enabled: !!session,
+  });
+  const statsQuery = useQuery({
+    ...trpc.pact.stats.queryOptions(),
+    enabled: !!session,
+  });
 
-  const deletePostMutation = useMutation(
-    trpc.post.delete.mutationOptions({
-      onSettled: () =>
-        queryClient.invalidateQueries(trpc.post.all.queryFilter()),
-    }),
-  );
+  const totalAtStakeCents = statsQuery.data?.totalAtStakeCents ?? 0;
+  const pacts = pactsQuery.data ?? [];
 
   return (
-    <SafeAreaView className="bg-background">
-      {/* Changes page title visible on the header */}
-      <Stack.Screen options={{ title: "Home Page" }} />
-      <View className="bg-background h-full w-full p-4">
-        <Text className="text-foreground pb-2 text-center text-5xl font-bold">
-          Create <Text className="text-primary">T3</Text> Turbo
-        </Text>
+    <View style={{ flex: 1, backgroundColor: C.bg }}>
+      <Stack.Screen options={{ headerShown: false }} />
 
-        <MobileAuth />
-
-        <View className="py-2">
-          <Text className="text-primary font-semibold italic">
-            Press on a post
+      <ScrollView contentContainerStyle={{ paddingBottom: 110 }}>
+        <View
+          style={{
+            paddingTop: 64,
+            paddingBottom: 8,
+            paddingHorizontal: 24,
+            flexDirection: "row",
+            alignItems: "baseline",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 22,
+              fontWeight: "700",
+              color: C.ink,
+              letterSpacing: -0.6,
+            }}
+          >
+            Promise
+          </Text>
+          <Text style={{ fontSize: 13, color: C.muted, fontWeight: "500" }}>
+            <Text style={{ color: C.ink, fontWeight: "700" }}>
+              {dollars(totalAtStakeCents)}
+            </Text>{" "}
+            on the line
           </Text>
         </View>
 
-        <LegendList
-          data={postQuery.data ?? []}
-          estimatedItemSize={20}
-          keyExtractor={(item) => item.id}
-          ItemSeparatorComponent={() => <View className="h-2" />}
-          renderItem={(p) => (
-            <PostCard
-              post={p.item}
-              onDelete={() => deletePostMutation.mutate(p.item.id)}
-            />
-          )}
-        />
+        <View style={{ paddingTop: 24, paddingHorizontal: 8 }}>
+          {pacts.length === 0 && !pactsQuery.isPending ? (
+            <View
+              style={{
+                paddingVertical: 60,
+                paddingHorizontal: 24,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "600",
+                  color: C.ink2,
+                  textAlign: "center",
+                }}
+              >
+                No pacts yet.
+              </Text>
+              <Text
+                style={{
+                  fontSize: 13,
+                  color: C.muted,
+                  marginTop: 6,
+                  textAlign: "center",
+                }}
+              >
+                Make your first promise — pick a goal, stake some cash, and
+                let the courtroom keep you honest.
+              </Text>
+            </View>
+          ) : null}
 
-        <CreatePost />
-      </View>
-    </SafeAreaView>
+          {pacts.map((p, i) => {
+            const dot = statusDot(p.status, p.completedDays, p.durationDays);
+            return (
+              <Pressable
+                key={p.id}
+                onPress={() => router.push(`/pact/${p.id}`)}
+                style={({ pressed }) => ({
+                  opacity: pressed ? 0.7 : 1,
+                  paddingHorizontal: 16,
+                  paddingVertical: 18,
+                  borderTopWidth: i === 0 ? 1 : 0,
+                  borderTopColor: C.line,
+                  borderBottomWidth: 1,
+                  borderBottomColor: C.line,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 14,
+                })}
+              >
+                <View
+                  style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: 4,
+                    backgroundColor: dot,
+                  }}
+                />
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "600",
+                      color: C.ink,
+                      letterSpacing: -0.2,
+                    }}
+                  >
+                    {p.title}
+                  </Text>
+                  <Text style={{ fontSize: 12, color: C.muted, marginTop: 4 }}>
+                    Day {p.completedDays} of {p.durationDays}
+                    {p.status === "forfeited" ? " · forfeited" : ""}
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontWeight: "700",
+                    color: C.ink,
+                  }}
+                >
+                  {dollars(p.stakeCents)}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+
+        <View style={{ paddingTop: 28, paddingHorizontal: 20 }}>
+          <Btn kind="primary" onPress={() => router.push("/create")}>
+            New pact
+          </Btn>
+        </View>
+      </ScrollView>
+
+      <TabBar
+        active="home"
+        onSelect={(t) => {
+          if (t === "home") return;
+          if (t === "create") router.push("/create");
+          if (t === "me") router.push("/me");
+        }}
+      />
+    </View>
   );
 }
