@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, Stack } from "expo-router";
 import { LegendList } from "@legendapp/list";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button } from "heroui-native";
 
 import type { RouterOutputs } from "~/utils/api";
 import { trpc } from "~/utils/api";
@@ -78,8 +79,7 @@ function CreatePost() {
           {error.data.zodError.fieldErrors.content}
         </Text>
       )}
-      <Pressable
-        className="bg-primary flex items-center rounded-sm p-2"
+      <Button
         onPress={() => {
           mutate({
             title,
@@ -87,8 +87,8 @@ function CreatePost() {
           });
         }}
       >
-        <Text className="text-foreground">Create</Text>
-      </Pressable>
+        Create
+      </Button>
       {error?.data?.code === "UNAUTHORIZED" && (
         <Text className="text-destructive mt-2">
           You need to be logged in to create a post

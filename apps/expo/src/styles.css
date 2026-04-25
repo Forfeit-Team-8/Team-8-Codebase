@@ -1,7 +1,8 @@
-@import "tailwindcss/theme.css" layer(theme);
-@import "tailwindcss/preflight.css" layer(base);
-@import "tailwindcss/utilities.css";
+@import "tailwindcss";
+@import "uniwind";
 
-@import "nativewind/theme";
+@import "heroui-native/styles";
 
 @import "@acme/tailwind-config/theme";
+
+@source "../node_modules/heroui-native/lib";
