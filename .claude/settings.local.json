@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm --version)",
+      "Bash(docker --version)",
+      "Bash(docker compose *)",
+      "Bash(curl -s -o /dev/null -w \"Next.js HTTP %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -sS \"http://localhost:3000/api/trpc/ngo.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D\")"
+    ]
+  }
+}

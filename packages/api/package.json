@@ -6,7 +6,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
-    }
+    },
+    "./env": "./env.ts"
   },
   "license": "MIT",
   "scripts": {
@@ -21,7 +22,9 @@
     "@acme/auth": "workspace:*",
     "@acme/db": "workspace:*",
     "@acme/validators": "workspace:*",
+    "@anthropic-ai/sdk": "^0.91.1",
     "@better-auth/core": "1.4.0-beta.9",
+    "@t3-oss/env-core": "^0.13.8",
     "@trpc/server": "catalog:",
     "superjson": "2.2.3",
     "zod": "catalog:"

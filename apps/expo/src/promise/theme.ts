@@ -1,0 +1,47 @@
+export const C = {
+  bg: "#F2FBF4",
+  paper: "#FFFFFF",
+  ink: "#1F3A2A",
+  ink2: "#4A6655",
+  muted: "#8AA092",
+  line: "#E2EFE6",
+  primary: "#2EB872",
+  primaryDk: "#239658",
+  primaryInk: "#FFFFFF",
+  accent: "#FFD166",
+  warm: "#FF9A6C",
+  danger: "#E05767",
+  chip: "#E9F6EE",
+  chipWarm: "#FFF1DD",
+  chipDanger: "#FCE4E7",
+} as const;
+
+export const PIXEL_PALETTES = {
+  chunky: {
+    skin: "#F8C9A0",
+    skinShade: "#D89870",
+    hair: "#3E2A1E",
+    hairLight: "#6B4A2E",
+    suit: "#1B5E91",
+    suitDark: "#103A5C",
+    suitLight: "#3A86C1",
+    shirt: "#FAFAF7",
+    tie: "#E0454D",
+    tieDark: "#9B2828",
+    eye: "#1A1A1A",
+    mouth: "#1A1A1A",
+    cheek: "#FFB0A0",
+    outline: "#1F1A18",
+    robe: "#1A1A1A",
+    robeShade: "#0A0A0A",
+    collar: "#FFFFFF",
+    wig: "#E8E8E8",
+    wigShade: "#B5B5B5",
+    accent: "#FFD166",
+    accentDark: "#C99A3D",
+    danger: "#E05767",
+    success: "#2EB872",
+  },
+} as const;
+
+export type PixelPalette = (typeof PIXEL_PALETTES)["chunky"];

@@ -42,3 +42,9 @@ overrides:
 publicHoistPattern:
   - "@ianvs/prettier-plugin-sort-imports"
   - prettier-plugin-tailwindcss
+  # @better-auth/expo dynamically imports expo modules (e.g. expo-web-browser)
+  # at runtime. Pnpm's .pnpm virtual store doesn't expose them from inside
+  # better-auth's peer-dep slot, so Metro fails to resolve the dynamic import.
+  # Hoisting all expo-* makes them visible at the workspace root where Metro
+  # can find them.
+  - "expo-*"
