@@ -162,6 +162,14 @@ export default function Index() {
           </Text>
         </View>
 
+        <Link asChild href="/agent-debug">
+          <Pressable className="bg-primary mb-2 rounded-md p-2">
+            <Text className="text-foreground text-center font-bold">
+              Open agent debug →
+            </Text>
+          </Pressable>
+        </Link>
+
         <LegendList
           data={postQuery.data ?? []}
           estimatedItemSize={20}

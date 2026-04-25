@@ -5,6 +5,12 @@ import { appRouter, createTRPCContext } from "@acme/api";
 
 import { auth } from "~/auth/server";
 
+// Long-running agent runs need Node runtime + a generous timeout. Edge would
+// fight us on the streaming-tool-loop / SDK calls. 60s is the Vercel Pro cap;
+// drop to 30 for hobby tier.
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 /**
  * Configure basic CORS headers
  * You should extend this to match your needs
