@@ -147,7 +147,9 @@ export default function NgoDetail() {
                 <Text style={{ fontSize: 16 }}>✓</Text>
               </View>
               <View>
-                <Text style={{ fontSize: 12, color: C.muted, fontWeight: "600" }}>
+                <Text
+                  style={{ fontSize: 12, color: C.muted, fontWeight: "600" }}
+                >
                   RATING
                 </Text>
                 <Text style={{ fontSize: 14, fontWeight: "700", color: C.ink }}>

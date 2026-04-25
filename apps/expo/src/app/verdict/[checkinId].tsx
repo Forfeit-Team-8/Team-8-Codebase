@@ -256,9 +256,8 @@ export default function Verdict() {
                   lineHeight: 19,
                 }}
               >
-                The pact is dissolved. On the bright side — that's a real
-                cause getting a real boost. You can start again whenever
-                you're ready.
+                The pact is dissolved. On the bright side — that's a real cause
+                getting a real boost. You can start again whenever you're ready.
               </Text>
               <View
                 style={{

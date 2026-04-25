@@ -16,9 +16,24 @@ interface BtnProps extends Omit<PressableProps, "style"> {
 }
 
 const SIZES: Record<BtnSize, ViewStyle & { fontSize: number }> = {
-  lg: { fontSize: 17, paddingHorizontal: 20, paddingVertical: 16, minHeight: 54 },
-  md: { fontSize: 15, paddingHorizontal: 16, paddingVertical: 12, minHeight: 44 },
-  sm: { fontSize: 13, paddingHorizontal: 12, paddingVertical: 8, minHeight: 32 },
+  lg: {
+    fontSize: 17,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    minHeight: 54,
+  },
+  md: {
+    fontSize: 15,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    minHeight: 44,
+  },
+  sm: {
+    fontSize: 13,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    minHeight: 32,
+  },
 };
 
 const KINDS: Record<BtnKind, { bg: string; fg: string; shadow?: string }> = {

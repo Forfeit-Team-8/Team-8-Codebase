@@ -19,12 +19,13 @@ import { publicProcedure } from "../trpc";
  * `protectedProcedure` once user auth is wired through to the agent.
  */
 export const verdictRouter = {
-  run: publicProcedure
-    .input(verdictInputSchema)
-    .subscription(async function* ({ input, signal }) {
-      for await (const event of runAgent(input)) {
-        if (signal?.aborted) return;
-        yield event;
-      }
-    }),
+  run: publicProcedure.input(verdictInputSchema).subscription(async function* ({
+    input,
+    signal,
+  }) {
+    for await (const event of runAgent(input)) {
+      if (signal?.aborted) return;
+      yield event;
+    }
+  }),
 } satisfies TRPCRouterRecord;

@@ -96,8 +96,8 @@ export default function Home() {
                   textAlign: "center",
                 }}
               >
-                Make your first promise — pick a goal, stake some cash, and
-                let the courtroom keep you honest.
+                Make your first promise — pick a goal, stake some cash, and let
+                the courtroom keep you honest.
               </Text>
             </View>
           ) : null}

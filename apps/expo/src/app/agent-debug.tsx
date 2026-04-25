@@ -8,8 +8,8 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Stack } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
+import { Stack } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
 import { useSubscription } from "@trpc/tanstack-react-query";
 
@@ -79,7 +79,11 @@ export default function AgentDebug() {
   const evidence = useMemo<Evidence[]>(() => {
     if (evidenceKind === "url" && evidenceUrl.trim().length > 0) {
       return [
-        { kind: "url", url: evidenceUrl.trim(), note: evidenceNote || undefined },
+        {
+          kind: "url",
+          url: evidenceUrl.trim(),
+          note: evidenceNote || undefined,
+        },
       ];
     }
     if (evidenceKind === "photo" && photoFileId) {
@@ -448,7 +452,7 @@ function EventRow({ event }: { event: unknown }) {
     case "verdict": {
       const verdict = e.verdict as { status?: string };
       return (
-        <View className="my-2 rounded border-2 border-primary bg-primary/10 p-3">
+        <View className="border-primary bg-primary/10 my-2 rounded border-2 p-3">
           <Text className="text-foreground text-lg font-bold">
             🏛 VERDICT: {String(verdict.status)}
           </Text>
@@ -460,7 +464,7 @@ function EventRow({ event }: { event: unknown }) {
     }
     case "error":
       return (
-        <View className="my-1 rounded border border-destructive/40 bg-destructive/10 p-2">
+        <View className="border-destructive/40 bg-destructive/10 my-1 rounded border p-2">
           <Text className="text-destructive text-sm font-semibold">
             ❌ {String(e.message)}
           </Text>

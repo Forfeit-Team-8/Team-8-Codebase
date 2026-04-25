@@ -100,8 +100,7 @@ const NGOS = [
       { n: "34", l: "countries" },
       { n: "$25", l: "gives one person clean water for life" },
     ],
-    whereFundsGo:
-      "Forfeits go to WaterAid America (501c3), tax ID 30-0108263.",
+    whereFundsGo: "Forfeits go to WaterAid America (501c3), tax ID 30-0108263.",
     sortOrder: 4,
   },
   {

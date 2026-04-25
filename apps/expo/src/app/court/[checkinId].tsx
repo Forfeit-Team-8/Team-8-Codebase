@@ -130,7 +130,9 @@ export default function Courtroom() {
             </Text>
           </Pressable>
         </View>
-        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
           {errorMessage ? (
             <View style={{ alignItems: "center", maxWidth: 320 }}>
               <Text
@@ -229,8 +231,7 @@ export default function Courtroom() {
     );
   };
 
-  const speaker =
-    cur.type === "speak" ? SPEAKERS[cur.speaker] : null;
+  const speaker = cur.type === "speak" ? SPEAKERS[cur.speaker] : null;
 
   const shakeTransform = shakeAnim.interpolate({
     inputRange: [0, 1],
@@ -300,7 +301,14 @@ export default function Courtroom() {
             borderRadius: 8,
           }}
         >
-          <Text style={{ color: "#fff", fontSize: 9, letterSpacing: 0.5, fontWeight: "700" }}>
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 9,
+              letterSpacing: 0.5,
+              fontWeight: "700",
+            }}
+          >
             ← FLEE
           </Text>
         </Pressable>
@@ -315,7 +323,14 @@ export default function Courtroom() {
             gap: 8,
           }}
         >
-          <Text style={{ fontSize: 8, color: "#fff", fontWeight: "700", letterSpacing: 0.5 }}>
+          <Text
+            style={{
+              fontSize: 8,
+              color: "#fff",
+              fontWeight: "700",
+              letterSpacing: 0.5,
+            }}
+          >
             CREDIBILITY
           </Text>
           <View style={{ flexDirection: "row", gap: 4 }}>
@@ -564,7 +579,9 @@ export default function Courtroom() {
                 }}
               >
                 <Text style={{ fontSize: 22 }}>{e.emoji}</Text>
-                <Text style={{ fontSize: 14, color: "#FFD166" }}>{e.label}</Text>
+                <Text style={{ fontSize: 14, color: "#FFD166" }}>
+                  {e.label}
+                </Text>
               </Pressable>
             ))}
           </View>

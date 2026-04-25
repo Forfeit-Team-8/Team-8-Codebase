@@ -141,7 +141,12 @@ export async function* runAgent(
       }
 
       const { content, isError } = await executor(tu.input);
-      yield { type: "tool_result", toolName: tu.name, result: content, isError };
+      yield {
+        type: "tool_result",
+        toolName: tu.name,
+        result: content,
+        isError,
+      };
       toolResults.push({
         type: "tool_result",
         tool_use_id: tu.id,

@@ -44,40 +44,38 @@ export const pactRouter = {
     return rows;
   }),
 
-  byId: protectedProcedure
-    .input(PactIdInput)
-    .query(async ({ ctx, input }) => {
-      const pact = await ctx.db.query.Pact.findFirst({
-        where: and(
-          eq(Pact.id, input.pactId),
-          eq(Pact.userId, ctx.session.user.id),
-        ),
-      });
-      if (!pact) {
-        throw new TRPCError({ code: "NOT_FOUND" });
-      }
-      const ngo = await ctx.db.query.Ngo.findFirst({
-        where: eq(Ngo.id, pact.ngoId),
-      });
-      const recent = await ctx.db.query.Checkin.findMany({
-        where: eq(Checkin.pactId, pact.id),
-        orderBy: desc(Checkin.dayNumber),
-        limit: 10,
-      });
-      const completedRows = await ctx.db
-        .select({
-          completedDays: sql<number>`COUNT(*) FILTER (WHERE ${Checkin.status} = 'acquitted')::int`,
-        })
-        .from(Checkin)
-        .where(eq(Checkin.pactId, pact.id));
+  byId: protectedProcedure.input(PactIdInput).query(async ({ ctx, input }) => {
+    const pact = await ctx.db.query.Pact.findFirst({
+      where: and(
+        eq(Pact.id, input.pactId),
+        eq(Pact.userId, ctx.session.user.id),
+      ),
+    });
+    if (!pact) {
+      throw new TRPCError({ code: "NOT_FOUND" });
+    }
+    const ngo = await ctx.db.query.Ngo.findFirst({
+      where: eq(Ngo.id, pact.ngoId),
+    });
+    const recent = await ctx.db.query.Checkin.findMany({
+      where: eq(Checkin.pactId, pact.id),
+      orderBy: desc(Checkin.dayNumber),
+      limit: 10,
+    });
+    const completedRows = await ctx.db
+      .select({
+        completedDays: sql<number>`COUNT(*) FILTER (WHERE ${Checkin.status} = 'acquitted')::int`,
+      })
+      .from(Checkin)
+      .where(eq(Checkin.pactId, pact.id));
 
-      return {
-        pact,
-        ngo,
-        recent,
-        completedDays: completedRows[0]?.completedDays ?? 0,
-      };
-    }),
+    return {
+      pact,
+      ngo,
+      recent,
+      completedDays: completedRows[0]?.completedDays ?? 0,
+    };
+  }),
 
   create: protectedProcedure
     .input(CreatePactInput)

@@ -1,19 +1,13 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Slider } from "heroui-native";
 
 import { Btn } from "~/promise/Btn";
-import { BackButton, TopBar } from "~/promise/TopBar";
 import { C } from "~/promise/theme";
+import { BackButton, TopBar } from "~/promise/TopBar";
 import { trpc } from "~/utils/api";
 
 const DURATIONS = [7, 14, 28, 60] as const;
@@ -52,12 +46,12 @@ export default function CreatePact() {
       router.back();
       return;
     }
-    setStep(((step - 1) as 1 | 2 | 3));
+    setStep((step - 1) as 1 | 2 | 3);
   };
 
   const goNext = () => {
     if (step < 3) {
-      setStep(((step + 1) as 1 | 2 | 3));
+      setStep((step + 1) as 1 | 2 | 3);
       return;
     }
     if (!paying) {
@@ -204,7 +198,9 @@ function Step1({ title, setTitle, duration, setDuration }: Step1Props) {
       >
         {"What are you\npromising yourself?"}
       </Text>
-      <Text style={{ fontSize: 14, color: C.ink2, marginTop: 8, marginBottom: 20 }}>
+      <Text
+        style={{ fontSize: 14, color: C.ink2, marginTop: 8, marginBottom: 20 }}
+      >
         Make it specific. The AI will need to verify it.
       </Text>
 
@@ -319,7 +315,9 @@ function Step2({ ngos, ngoId, setNgoId, onTapInfo }: Step2Props) {
       >
         {"If you fail,\nwho gets the cash?"}
       </Text>
-      <Text style={{ fontSize: 14, color: C.ink2, marginTop: 8, marginBottom: 20 }}>
+      <Text
+        style={{ fontSize: 14, color: C.ink2, marginTop: 8, marginBottom: 20 }}
+      >
         Pick a cause. We forward 100% — no fees on forfeits.
       </Text>
 
@@ -408,7 +406,9 @@ function Step2({ ngos, ngoId, setNgoId, onTapInfo }: Step2Props) {
                 }}
               >
                 {selected ? (
-                  <Text style={{ color: "#fff", fontSize: 11, fontWeight: "700" }}>
+                  <Text
+                    style={{ color: "#fff", fontSize: 11, fontWeight: "700" }}
+                  >
                     ✓
                   </Text>
                 ) : null}
@@ -441,10 +441,12 @@ function Step3({ stake, setStake, duration, ngoName }: Step3Props) {
       >
         {"How much\nare you willing to lose?"}
       </Text>
-      <Text style={{ fontSize: 14, color: C.ink2, marginTop: 8, marginBottom: 20 }}>
+      <Text
+        style={{ fontSize: 14, color: C.ink2, marginTop: 8, marginBottom: 20 }}
+      >
         If you fail, this goes to{" "}
-        <Text style={{ color: C.ink, fontWeight: "700" }}>{ngoName}</Text>.
-        Pick a number that stings just enough.
+        <Text style={{ color: C.ink, fontWeight: "700" }}>{ngoName}</Text>. Pick
+        a number that stings just enough.
       </Text>
 
       <View
@@ -579,7 +581,9 @@ function PaymentStep({ title, stake, duration, ngoName }: PaymentStepProps) {
       >
         {"Lock in\nyour stake"}
       </Text>
-      <Text style={{ fontSize: 14, color: C.ink2, marginTop: 8, marginBottom: 20 }}>
+      <Text
+        style={{ fontSize: 14, color: C.ink2, marginTop: 8, marginBottom: 20 }}
+      >
         We'll authorize ${stake} now. You're not charged unless you fail.
       </Text>
 
@@ -658,7 +662,14 @@ function PaymentStep({ title, stake, duration, ngoName }: PaymentStepProps) {
             justifyContent: "center",
           }}
         >
-          <Text style={{ color: "#fff", fontSize: 9, fontWeight: "800", letterSpacing: 0.5 }}>
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: 9,
+              fontWeight: "800",
+              letterSpacing: 0.5,
+            }}
+          >
             VISA
           </Text>
         </View>

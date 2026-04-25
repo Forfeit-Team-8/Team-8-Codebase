@@ -24,7 +24,8 @@ export function buildUserMessage(input: VerdictInput): string {
   const lines: string[] = [];
   lines.push("# Goal");
   lines.push(`Title: ${input.goal.title}`);
-  if (input.goal.description) lines.push(`Description: ${input.goal.description}`);
+  if (input.goal.description)
+    lines.push(`Description: ${input.goal.description}`);
   lines.push(`Deadline: ${input.goal.deadline}`);
   lines.push(`Stake: €${(input.goal.stakeAmountCents / 100).toFixed(2)}`);
   lines.push(`NGO if forfeited: ${input.goal.ngoName}`);

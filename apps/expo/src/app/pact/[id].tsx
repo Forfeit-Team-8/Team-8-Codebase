@@ -3,10 +3,10 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { Btn } from "~/promise/Btn";
-import { Character } from "~/promise/PixelArt";
 import { Chip } from "~/promise/Chip";
-import { BackButton, TopBar } from "~/promise/TopBar";
+import { Character } from "~/promise/PixelArt";
 import { C } from "~/promise/theme";
+import { BackButton, TopBar } from "~/promise/TopBar";
 import { trpc } from "~/utils/api";
 
 function dollars(cents: number) {
@@ -70,7 +70,9 @@ export default function PactDetail() {
                       justifyContent: "center",
                     }}
                   >
-                    <Text style={{ fontSize: 28 }}>{data.ngo?.emoji ?? "🎯"}</Text>
+                    <Text style={{ fontSize: 28 }}>
+                      {data.ngo?.emoji ?? "🎯"}
+                    </Text>
                   </View>
                   <View style={{ flex: 1 }}>
                     <Chip tone="warm">DUE TODAY · 9:00 PM</Chip>
@@ -85,7 +87,9 @@ export default function PactDetail() {
                     >
                       {data.pact.title}
                     </Text>
-                    <Text style={{ fontSize: 12, color: C.muted, marginTop: 2 }}>
+                    <Text
+                      style={{ fontSize: 12, color: C.muted, marginTop: 2 }}
+                    >
                       {dollars(data.pact.stakeCents)} → {data.ngo?.name ?? ""}
                     </Text>
                   </View>
@@ -193,7 +197,11 @@ export default function PactDetail() {
                 }}
               >
                 <View
-                  style={{ flexDirection: "row", gap: 12, alignItems: "flex-start" }}
+                  style={{
+                    flexDirection: "row",
+                    gap: 12,
+                    alignItems: "flex-start",
+                  }}
                 >
                   <Character kind="judge" scale={2} />
                   <View style={{ flex: 1 }}>
@@ -291,8 +299,7 @@ export default function PactDetail() {
                   >
                     <Text
                       style={{
-                        color:
-                          r.status === "acquitted" ? C.primary : "#9a3340",
+                        color: r.status === "acquitted" ? C.primary : "#9a3340",
                         fontWeight: "700",
                         fontSize: 14,
                       }}
@@ -305,7 +312,9 @@ export default function PactDetail() {
                     </Text>
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontWeight: "600", fontSize: 14, color: C.ink }}>
+                    <Text
+                      style={{ fontWeight: "600", fontSize: 14, color: C.ink }}
+                    >
                       {r.status === "acquitted"
                         ? "Acquitted"
                         : r.status === "guilty"
@@ -318,7 +327,9 @@ export default function PactDetail() {
                       Day {r.dayNumber}
                     </Text>
                   </View>
-                  <Text style={{ fontSize: 12, color: C.muted, fontWeight: "500" }}>
+                  <Text
+                    style={{ fontSize: 12, color: C.muted, fontWeight: "500" }}
+                  >
                     {new Date(r.createdAt).toLocaleDateString()}
                   </Text>
                 </View>

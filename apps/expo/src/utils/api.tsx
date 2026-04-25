@@ -1,3 +1,6 @@
+// React Native has no built-in EventSource. react-native-sse provides one
+// that's API-compatible enough for tRPC's httpSubscriptionLink.
+import RNEventSource from "react-native-sse";
 import { QueryClient } from "@tanstack/react-query";
 import {
   createTRPCClient,
@@ -7,9 +10,6 @@ import {
   splitLink,
 } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
-// React Native has no built-in EventSource. react-native-sse provides one
-// that's API-compatible enough for tRPC's httpSubscriptionLink.
-import RNEventSource from "react-native-sse";
 import superjson from "superjson";
 
 import type { AppRouter } from "@acme/api";
